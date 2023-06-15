@@ -1,0 +1,34 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Neural Networks</title>
+  
+    <script type="text/javascript" src="./assetmanager.js"></script>
+    <script type="text/javascript" src="./timer.js"></script>
+    <script type="text/javascript" src="./gameengine.js"></script>
+    <script type="text/javascript" src="./util.js"></script>
+    <script type="text/javascript" src="./neuron.js"></script>
+    <script type="text/javascript" src="./neuralnetwork.js"></script>
+    <script type="text/javascript" src="./population.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="gameWorld" width="1000" height="1000" style="background: white; border: 1px solid black" tabindex="0" autofocus></canvas>
+    <div class="slider-container">
+        <label for="plantgrowth">Plant Growth</label>
+        <input type="range" id="plantgrowth" min="1" max="80" value="20" class="slider">
+        
+        <label for="animatgrowth">Animat Growth</label>
+        <input type="range" id="animatgrowth" min="1" max="80" value="4" class="slider">
+
+        <label for="animatselection">Animat Food Selectivity</label>
+        <input type="range" id="animatselection" min="-1" max="1" value="0" step="0.05" class="slider">
+    </div>
+    <button type="button" id="plant" class="button">Add Plant</button>
+    <button type="button" id="animat" class="button">Add Animat</button>
+    <button type="button" id="clear" class="button">Clear All</button>
+</body>
+</html>
