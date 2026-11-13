@@ -16,8 +16,12 @@ ASSET_MANAGER.downloadAll(() => {
 			hiddenNeurons: [new Neuron({numInputs: 2, bias: -1, weights: [1, -2]}), new Neuron({numInputs: 2, bias: -1, weights: [-2, 1]})], 
 			outputNeuron: new Neuron({numInputs: 2, bias: 0, weights: [1, 1]})};
 	
-	let population = new Population(12);
-	gameEngine.addEntity(population);
+	window.restart = function () {
+		const population = new Population(12);
+		gameEngine.entities = [population];
+		showFitness(population);
+	};
+	restart();
 
 	gameEngine.init(ctx);
 

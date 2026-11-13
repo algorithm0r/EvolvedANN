@@ -1,34 +1,77 @@
-﻿
-<!DOCTYPE html>
-<html>
+﻿<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Neural Networks</title>
-  
-    <script type="text/javascript" src="./assetmanager.js"></script>
-    <script type="text/javascript" src="./timer.js"></script>
-    <script type="text/javascript" src="./gameengine.js"></script>
-    <script type="text/javascript" src="./util.js"></script>
-    <script type="text/javascript" src="./neuron.js"></script>
-    <script type="text/javascript" src="./neuralnetwork.js"></script>
-    <script type="text/javascript" src="./population.js"></script>
-    <script type="text/javascript" src="./main.js"></script>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evolving Neural Networks</title>
+<!-- Claude Basic 0.6.0, vendored and pinned -->
+<link rel="stylesheet" href="vendor/claude-basic.css">
+<script src="vendor/claude-basic.js"></script>
+<style>
+  .top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px var(--cb-gap) 0; }
+  .top .spacer { flex: 1; }
+  .top h1 { margin: 0; font-size: 20px; }
+  .about { max-width: 980px; padding: 4px var(--cb-gap) 0; color: var(--cb-muted); font-size: 13px; line-height: 1.5; }
+  .cb-sim-world { max-width: 760px; }
+  #gameWorld { width: 100%; height: auto; background: #fff; }
+</style>
 </head>
 <body>
-    <canvas id="gameWorld" width="1000" height="1000" style="background: white; border: 1px solid black" tabindex="0" autofocus></canvas>
-    <div class="slider-container">
-        <label for="plantgrowth">Plant Growth</label>
-        <input type="range" id="plantgrowth" min="1" max="80" value="20" class="slider">
-        
-        <label for="animatgrowth">Animat Growth</label>
-        <input type="range" id="animatgrowth" min="1" max="80" value="4" class="slider">
+<div class="top">
+  <h1 class="cb-title">Evolving Neural Networks<span class="cb-dot">.</span></h1>
+  <span class="spacer"></span>
+  <span id="picker"></span>
+</div>
+<p class="about">
+  Twelve tiny neural networks (two inputs, two hidden neurons, one output) evolve to compute XOR,
+  with no training, only selection. Each generation every network is tried on the four input pairs
+  and scored out of 4; the better half survive, and their offspring mix the parents' weights and
+  mutate. Each row is one network, drawn once for each input pair, best network first;
+  a neuron is green when it fires (activation above 0.5).
+</p>
 
-        <label for="animatselection">Animat Food Selectivity</label>
-        <input type="range" id="animatselection" min="-1" max="1" value="0" step="0.05" class="slider">
+<div class="cb-sim">
+  <div class="cb-sim-stage">
+    <div class="cb-sim-world"><canvas id="gameWorld" width="1000" height="1000"></canvas></div>
+    <div class="cb-sim-controls">
+      <label class="cb-sim-ctl"><span class="k"><span>Frames per generation</span><output for="speed"></output></span>
+        <input type="range" class="cb-range" id="speed" min="1" max="60" value="2" step="1"></label>
+      <div class="btns">
+        <button type="button" class="cb-btn primary" id="pause">Pause</button>
+        <button type="button" class="cb-btn" id="restart">Start over</button>
+      </div>
     </div>
-    <button type="button" id="plant" class="button">Add Plant</button>
-    <button type="button" id="animat" class="button">Add Animat</button>
-    <button type="button" id="clear" class="button">Clear All</button>
+  </div>
+  <div class="cb-sim-charts">
+    <cb-sim-series id="fitness" label="Fitness (4 = solves XOR)" window="400" x-label="generation" class="wide"></cb-sim-series>
+  </div>
+</div>
+
+<script>
+  // The page around the sim: controls and the fitness chart.
+  function showFitness(pop) {
+    document.getElementById('fitness').data = { dx: 1, series: [
+      { label: 'best', values: pop.best, color: 'var(--cb-series-1)' },
+      { label: 'mean', values: pop.mean, color: 'var(--cb-muted)' }] };
+  }
+</script>
+<script src="./assetmanager.js"></script>
+<script src="./timer.js"></script>
+<script src="./gameengine.js"></script>
+<script src="./util.js"></script>
+<script src="./neuron.js"></script>
+<script src="./neuralnetwork.js"></script>
+<script src="./population.js"></script>
+<script src="./main.js"></script>
+<script>
+  (function () {
+    var $ = function (id) { return document.getElementById(id); };
+    var speed = $('speed'), out = document.querySelector('output[for=speed]');
+    (speed.oninput = function () { out.textContent = speed.value; PARAMETERS.framesPerGeneration = +speed.value; })();
+    $('pause').onclick = function () { PARAMETERS.paused = !PARAMETERS.paused; this.textContent = PARAMETERS.paused ? 'Run' : 'Pause'; };
+    $('restart').onclick = function () { window.restart(); };
+    $('picker').appendChild(CB.theme.picker());
+  })();
+</script>
 </body>
 </html>

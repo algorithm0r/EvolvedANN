@@ -13,6 +13,8 @@ class Population {
 
 		this.evolutionTickCounter = 0;
 		this.generation = 0;
+		this.best = []; // best and mean fitness per generation (charted by the page)
+		this.mean = [];
 	}
 
 	evolve() {
@@ -40,6 +42,9 @@ class Population {
 
 			network.fitness = fitness;
 		}
+		const f = this.networks.map(n => n.fitness);
+		this.best.push(Math.max(...f));
+		this.mean.push(f.reduce((a, b) => a + b, 0) / f.length);
 	}
 
 	selection() {
@@ -88,9 +93,10 @@ class Population {
 	}
 
 	update() {
+		if (PARAMETERS.paused) return;
 		this.evolutionTickCounter++;
 
-		if (this.evolutionTickCounter >= 1) {
+		if (this.evolutionTickCounter >= PARAMETERS.framesPerGeneration) {
 			this.evolve();
 
 			// arrange networks for display

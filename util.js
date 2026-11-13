@@ -8,7 +8,9 @@ const PARAMETERS = {
     expectedOutputs: [0, 1, 1, 0],
     mutationRate: 0.05,
     mutationRange: 0.1,
-    neuronRadius: 10
+    neuronRadius: 10,
+    framesPerGeneration: 2, // set by the page's speed slider
+    paused: false
 };
 
 /**
